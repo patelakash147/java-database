@@ -1,0 +1,92 @@
+
+-- sql statements with sample data
+
+
+
+drop table place;
+drop table instrument;
+drop table songs;
+drop table album;
+drop table musician ;
+
+
+
+
+
+create table musician (
+    id integer ,
+    ssn  varchar(255) primary key,
+    name varchar(255)
+    );
+ insert into musician (id,ssn, name) values (1,'123-454-589', 'peter');
+ insert into musician (id,ssn, name) values (2,'435-543-893', 'ron'); 
+ insert into musician (id,ssn, name) values (3,'758-546-493', 'ranjeet');
+ insert into musician (id,ssn, name) values (4,'758-454-492', 'neel');
+ insert into musician (id,ssn, name) values (5,'749-375-532', 'roy');
+ 
+ create table album(
+
+     id integer,
+     albumidentifier integer primary key,
+     format			 varchar(255)				,
+     copyrightdate   		  varchar(255)		,
+     title			 varchar(255)		,
+     M_ssn			 varchar references musician(ssn)
+ 
+ );
+ 
+ insert into album (id,albumidentifier,format,copyrightdate,title,m_ssn) values (1,145,'mp3','11-3-2016','bss ek pal','123-454-589' );
+ insert into album (id,albumidentifier,format,copyrightdate,title,m_ssn) values (2,148,'mp4','2-3-2016','aey khuda','758-454-492' );
+ insert into album (id,albumidentifier,format,copyrightdate,title,m_ssn) values (3,150,'mp3','7-3-2016','tum hi ho','435-543-893' );
+ insert into album (id,albumidentifier,format,copyrightdate,title,m_ssn) values (4,155,'vidio','9-3-2016','des rangila','749-375-532' );
+ insert into album (id,albumidentifier,format,copyrightdate,title,m_ssn) values (5,160,'vidio','10-3-2016','all we know','758-546-493' );
+ 
+  create table songs(
+     song_id 			integer primary key,
+     title   			varchar(255),
+     author  			varchar(255),
+     songs_albumidentifier 	integer references album(albumidentifier)
+ );
+ 
+ insert into songs (song_id,title,author,songs_albumidentifier) values (1,'terebin','ram ',145);
+ insert into songs (song_id,title,author,songs_albumidentifier) values (2,'bs ek pal','lakhman ',145);
+ insert into songs (song_id,title,author,songs_albumidentifier) values (3,'nadan parinde','makani ',145);
+ insert into songs (song_id,title,author,songs_albumidentifier) values (4,'hum dil de chuke sanam','kishan ',145);
+ insert into songs (song_id,title,author,songs_albumidentifier) values (5,'raaz','dev ',145);
+ 
+ create table instrument(
+     instrument_id  integer primary key,
+     name         varchar(255),        
+     i_key          varchar(255),
+     m_ssn          varchar references musician(ssn)
+     );
+     
+ insert into instrument (instrument_id, name,i_key,m_ssn) values (1,'guitar','C','435-543-893');
+ insert into instrument (instrument_id, name,i_key,m_ssn) values (2,'synthesizer','B-','758-454-492');
+ insert into instrument (instrument_id, name,i_key,m_ssn) values (3,'flute','flat','749-375-532');
+ insert into instrument (instrument_id, name,i_key,m_ssn) values (4,'drum','E-flat','123-454-589');
+ insert into instrument (instrument_id, name,i_key,m_ssn) values (5,'tabla','E-flat','758-546-493');
+ 
+ 
+ 
+ create table place (
+
+  place_id  integer primary key,
+   address 		varchar(255),
+   phone_number  varchar(500),
+   M_ssn		 varchar references musician(ssn)
+ 
+ );
+ 
+  insert into place (place_id,address,phone_number, M_ssn) values (1,'156 stevens apt d','1234568978','123-454-589');
+ insert into place (place_id,address,phone_number, M_ssn) values (2,'778 new ave aapt c','4356785748', '435-543-893');
+ insert into place (place_id,address,phone_number, M_ssn) values (3,'77 baldwin ave ','4785748763', '758-546-493');
+ insert into place (place_id,address,phone_number, M_ssn) values (4,'88 california ave','5675874634', '758-454-492');
+ insert into place (place_id,address,phone_number, M_ssn) values (5,'877 china town','4758798743', '749-375-532');
+ 
+ 
+ 
+
+
+ 
+ 

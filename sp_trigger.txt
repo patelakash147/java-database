@@ -1,0 +1,93 @@
+--A). Percentage of cd_Album()
+
+SELECT a.[albumidentifier] "Album Id",
+a.[title] "Title",
+count(s.[songs_id])*100/15 "Percentage of CD Album"
+FROM album a
+INNER JOIN songs s ON a.albumidentifier = s.songs_songs_s_albumidentifier_fkey_fkey
+GROUP BY a.albumidentifier,a.title
+
+
+CREATE FUNCTION cd_Album() 
+
+RETURNS TABLE
+AS 
+		RETURN (SELECT a.[albumidentifier] "Album Id",
+				a.[title] "Title",
+				count(s.[songs_id])*100/15 "Percentage of CD Album"
+				FROM album a
+				INNER JOIN songs s ON a.albumidentifier = s.songs_songs_s_albumidentifier_fkey_fkey
+				GROUP BY a.albumidentifier,a.title)
+GO
+
+SELECT * FROM cd_Album()
+
+
+-- Function: total_songs()
+
+-- DROP FUNCTION total_songs();
+
+CREATE OR REPLACE FUNCTION total_songs()
+  RETURNS trigger AS
+$BODY$  
+BEGIN  
+        IF (select count(*) from songs where songs_albumidentifier=NEW.songs_albumidentifier) > 15
+       then  Delete from songs where  song_id=NEW.song_id;
+   
+    
+    END IF;
+      return null;  
+END;  
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION total_songs()
+  OWNER TO cs4222s24;
+
+
+--d) song_restrict  trigger
+
+
+CREATE TRIGGER song_restrict
+  AFTER INSERT
+  ON songs
+  FOR EACH ROW
+  EXECUTE PROCEDURE total_songs();
+
+--c ) 
+
+-- Trigger: remove_album on songs
+
+-- DROP TRIGGER remove_album ON songs;
+
+CREATE TRIGGER remove_album
+  AFTER DELETE
+  ON songs
+  FOR EACH ROW
+  EXECUTE PROCEDURE rem_album();
+
+
+ function :
+-- Function: rem_album()
+
+-- DROP FUNCTION rem_album();
+
+CREATE OR REPLACE FUNCTION rem_album()
+  RETURNS trigger AS
+$BODY$  
+
+DECLARE count INT;
+BEGIN  
+
+        IF (select count(*)  from songs where songs_albumidentifier=(select songs_albumidentifier  from songs where song_id=New.song_id))= 0
+       then  Delete from album where albumidentifier=146;
+   
+    
+    END IF;
+      return null;  
+END;  
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION rem_album()
+  OWNER TO cs4222s24;
